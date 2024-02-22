@@ -1,4 +1,4 @@
-import { Buoy } from '../models/Buoy.ts'
+import { BuoyModel } from '../models/buoy.ts'
 import { DbBuoyRecord, allData, formatedBuoys, id, value } from '../types.js'
 
 function getBuoys() {
@@ -83,9 +83,7 @@ async function updateBuoysData() {
 }
 
 async function findLastBuoy(): Promise<DbBuoyRecord | null> {
-  const lastBuoyData = await Buoy.findOne()
-    .sort({ _id: -1 })
-    .select('-_id -__v')
+  const lastBuoyData = await BuoyModel.getLastBuoy()
   return lastBuoyData as DbBuoyRecord
 }
 
@@ -111,7 +109,7 @@ export async function scheduledUpdate() {
     updateBuoysData().then((newData) => {
       if (!lastBuoy) {
         console.log('there was nothing in the database')
-        Buoy.insertMany(newData).then((data) => {
+        BuoyModel.addMultipleBuoys(newData).then((data) => {
           console.log('uploaded ALL data')
           console.log('last record uploaded: ', data[data.length - 1])
         })
@@ -123,7 +121,7 @@ export async function scheduledUpdate() {
           console.log('no new data to upload')
           return
         }
-        Buoy.insertMany(dataToUpload).then(() => {
+        BuoyModel.addMultipleBuoys(dataToUpload).then(() => {
           console.log('uploaded new data')
         })
       }

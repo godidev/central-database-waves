@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose'
 
-export const waveSchema = new Schema({
+const buoySchema = new Schema({
   day: String,
   hour: String,
   period: Number,
@@ -10,4 +10,18 @@ export const waveSchema = new Schema({
   avgPeriod: Number,
 })
 
-export const Buoy = model('Buoy', waveSchema)
+const Buoy = model('Buoy', buoySchema)
+
+export class BuoyModel {
+  static async getBuoys() {
+    return Buoy.find()
+  }
+
+  static async getLastBuoy() {
+    return Buoy.findOne().sort({ _id: -1 }).select('-_id -__v')
+  }
+
+  static async addMultipleBuoys(buoys) {
+    return Buoy.insertMany(buoys)
+  }
+}

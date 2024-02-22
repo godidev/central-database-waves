@@ -1,18 +1,16 @@
-import express, { Request, Response, json } from 'express'
+import express, { json } from 'express'
 const app = express()
 import { config } from 'dotenv'
 config()
 import mongoose from 'mongoose'
 import { scheduledUpdate } from './utils/buoys.ts'
 import cron from 'node-cron'
+import { buoysRouter } from './routes/buoys.ts'
 const { PORT, MONGO_URL } = process.env
 
 app.use(json())
 
-app.get('/buoys', (req: Request, res: Response) => {
-  res.json({ message: 'Hello World' })
-})
-
+app.use('/buoys', buoysRouter)
 mongoose
   .connect(MONGO_URL)
   .then(() => {
