@@ -21,11 +21,10 @@ mongoose
   })
   .catch((err) => console.error(err))
 
-cron.schedule('0 0,12 * * *', () => {
+cron.schedule('0 0,12 * * *', async () => {
   try {
-    scheduledUpdate().then(() => {
-      console.log('done')
-    })
+    await scheduledUpdate()
+    console.log('Buoy data updated successfully!')
   } catch (err) {
     console.error(err)
   }
