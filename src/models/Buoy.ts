@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose'
+import { DbBuoyRecord } from '../types.js'
 
 const buoySchema = new Schema({
   day: String,
@@ -14,14 +15,31 @@ const Buoy = model('Buoy', buoySchema)
 
 export class BuoyModel {
   static async getBuoys() {
-    return Buoy.find()
+    try {
+      const buoys: DbBuoyRecord[] = await Buoy.find()
+      return buoys
+    } catch (err) {
+      throw new Error("Couldn't get buoys from the database")
+    }
   }
 
   static async getLastBuoy() {
-    return Buoy.findOne().sort({ _id: -1 }).select('-_id -__v')
+    try {
+      const lastBuoyData: DbBuoyRecord = await Buoy.findOne()
+        .sort({ _id: -1 })
+        .select('-_id -__v')
+      return lastBuoyData
+    } catch (err) {
+      throw new Error("Couldn't get last buoy data from the database")
+    }
   }
 
   static async addMultipleBuoys(buoys) {
-    return Buoy.insertMany(buoys)
+    try {
+      const data = await Buoy.insertMany(buoys)
+      return data
+    } catch (err) {
+      throw new Error("Couldn't add multiple buoys to the database")
+    }
   }
 }
