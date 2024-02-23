@@ -3,14 +3,15 @@ const app = express()
 import { config } from 'dotenv'
 config()
 import mongoose from 'mongoose'
-import { scheduledUpdate } from './utils/buoys.ts'
-import cron from 'node-cron'
 import { buoysRouter } from './routes/buoys.ts'
+import { scrapeRouter } from './routes/scrape.ts'
 const { PORT, MONGO_URL } = process.env
 
 app.use(json())
 
 app.use('/buoys', buoysRouter)
+app.use('/scrape', scrapeRouter)
+
 mongoose
   .connect(MONGO_URL)
   .then(() => {
@@ -20,12 +21,3 @@ mongoose
     })
   })
   .catch((err) => console.error(err))
-
-cron.schedule('0 0,12 * * *', async () => {
-  try {
-    await scheduledUpdate()
-    console.log('Buoy data updated successfully!')
-  } catch (err) {
-    console.error(err)
-  }
-})
