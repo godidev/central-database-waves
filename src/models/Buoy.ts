@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-import { DbBuoyRecord } from '../types.js'
+import { DbBuoyRecord } from '../types.ts'
 
 const buoySchema = new Schema({
   day: String,

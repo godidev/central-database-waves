@@ -1,5 +1,5 @@
 type id = 34 | 13 | 20 | 21 | 32
-type value = Pick<data, 'valor'>['valor']
+type value = Pick<fetchData, 'valor'>['valor']
 
 type date = string
 

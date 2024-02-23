@@ -66,8 +66,14 @@ async function updateBuoysData() {
     return Object.entries(data)
       .map(([day, hours]) => {
         return Object.entries(hours).map(([hour, values]) => {
-          const [period, height, avgDirection, peakDirection, avgPeriod] =
-            Object.values(values)
+          const {
+            'Direcc. Media de Proced.': avgDirection,
+            'Direcc. de pico de proced.': peakDirection,
+            'Periodo de Pico': period,
+            'Periodo Medio Tm02': avgPeriod,
+            'Altura Signif. del Oleaje': height,
+          } = values
+
           return {
             day,
             hour,
