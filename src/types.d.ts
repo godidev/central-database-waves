@@ -34,6 +34,7 @@ type formatedBuoys = {
 }
 
 export interface DbBuoyRecord {
+  year: number
   month: number
   day: number
   hour: number
@@ -45,6 +46,8 @@ export interface DbBuoyRecord {
 }
 
 export interface WaveData {
+  year: number
+  month: number
   day: number
   hour: number
   height: number
