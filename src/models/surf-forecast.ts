@@ -2,6 +2,7 @@ import { Schema, model } from 'mongoose'
 import { WaveData } from '../types.ts'
 
 const SurfForecastSchema = new Schema({
+  month: Number,
   day: Number,
   hour: Number,
   height: Number,

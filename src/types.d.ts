@@ -34,8 +34,9 @@ type formatedBuoys = {
 }
 
 export interface DbBuoyRecord {
-  day: string
-  hour: string
+  month: number
+  day: number
+  hour: number
   period: number
   height: number
   avgDirection: number
