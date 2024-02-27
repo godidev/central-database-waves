@@ -62,6 +62,8 @@ function organizeData(data: allData[]) {
 }
 
 async function updateBuoysData() {
+  const date = new Date()
+  const month = date.getMonth() + 1
   return getBuoys().then((data: formatedBuoys) => {
     return Object.entries(data)
       .map(([day, hours]) => {
@@ -75,8 +77,9 @@ async function updateBuoysData() {
           } = values
 
           return {
-            day,
-            hour,
+            month,
+            day: Number(day),
+            hour: Number(hour),
             period,
             height,
             avgDirection,
@@ -122,9 +125,8 @@ export async function scheduledUpdate() {
 
     if (!lastBuoy) {
       console.log('there was nothing in the database')
-      const data = await BuoyModel.addMultipleBuoys(newData)
+      await BuoyModel.addMultipleBuoys(newData)
       console.log('uploaded ALL data')
-      console.log('last record uploaded: ', data[data.length - 1])
       return
     }
     console.log(
@@ -133,6 +135,7 @@ export async function scheduledUpdate() {
       'checking if it matches any of the new data',
     )
     const dataToUpload = sliceData(lastBuoy, newData)
+
     if (!dataToUpload) {
       console.log('no new data to upload')
       return

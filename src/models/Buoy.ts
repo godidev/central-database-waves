@@ -2,8 +2,9 @@ import { Schema, model } from 'mongoose'
 import { DbBuoyRecord } from '../types.ts'
 
 const buoySchema = new Schema({
-  day: String,
-  hour: String,
+  month: Number,
+  day: Number,
+  hour: Number,
   period: Number,
   height: Number,
   avgDirection: Number,
@@ -34,10 +35,27 @@ export class BuoyModel {
     }
   }
 
-  static async addMultipleBuoys(buoys) {
+  static async addBuoy(buoys) {
     try {
+      console.log({ buoys })
       const data = await Buoy.insertMany(buoys)
       return data
+    } catch (err) {
+      throw new Error("Couldn't add multiple buoys to the database")
+    }
+  }
+
+  static async addMultipleBuoys(buoys) {
+    try {
+      buoys.forEach(async (data) => {
+        await Buoy.findOneAndUpdate(
+          { month: data.month, day: data.day, hour: data.hour },
+          data,
+          {
+            upsert: true,
+          },
+        )
+      })
     } catch (err) {
       throw new Error("Couldn't add multiple buoys to the database")
     }

@@ -10,7 +10,7 @@ export const scrapeRouter = Router()
 scrapeRouter.get('/buoys', BuoyController.addNewBuoys)
 scrapeRouter.get('/surf-forecast', SurfForecastController.fetchSurfForecast)
 
-cron.schedule('0 0,12 * * *', async () => {
+cron.schedule('05,35 */2 * * *', async () => {
   try {
     await scheduledUpdateBuoys()
   } catch (err) {
