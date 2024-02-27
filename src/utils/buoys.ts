@@ -64,6 +64,8 @@ function organizeData(data: allData[]) {
 async function updateBuoysData() {
   const date = new Date()
   const month = date.getMonth() + 1
+  const year = date.getFullYear()
+
   return getBuoys().then((data: formatedBuoys) => {
     return Object.entries(data)
       .map(([day, hours]) => {
@@ -77,6 +79,7 @@ async function updateBuoysData() {
           } = values
 
           return {
+            year,
             month,
             day: Number(day),
             hour: Number(hour),

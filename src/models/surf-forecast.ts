@@ -2,6 +2,7 @@ import { Schema, model } from 'mongoose'
 import { WaveData } from '../types.ts'
 
 const SurfForecastSchema = new Schema({
+  year: Number,
   month: Number,
   day: Number,
   hour: Number,
@@ -45,7 +46,12 @@ export class SurfForecastModel {
     try {
       forecast.forEach(async (data) => {
         await SurfForecast.findOneAndUpdate(
-          { day: data.day, hour: data.hour },
+          {
+            day: data.day,
+            hour: data.hour,
+            month: data.month,
+            year: data.year,
+          },
           data,
           {
             upsert: true,

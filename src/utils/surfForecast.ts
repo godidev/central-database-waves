@@ -41,11 +41,13 @@ async function parseForecast(html) {
     'td.forecast-table__cell.forecast-table-energy__cell > strong',
   )
   const data = []
+  const date = new Date()
+  const month = date.getMonth() + 1
+  const year = date.getFullYear()
 
   waves.each((index, element) => {
     const [day, hour] = getDate($(element).attr('data-date'))
     const dataArray = JSON.parse($(element).attr('data-swell-state'))
-    console.log({ dataArray })
 
     if (!dataArray) {
       console.log('dataArray is empty')
@@ -63,6 +65,8 @@ async function parseForecast(html) {
     const { angle, letters } = direction
 
     data.push({
+      year,
+      month,
       day,
       hour,
       height,
