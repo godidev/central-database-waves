@@ -42,3 +42,19 @@ export interface DbBuoyRecord {
   peakDirection: number
   avgPeriod: number
 }
+
+export interface WaveData {
+  day: number
+  hour: number
+  height: number
+  period: number
+  waveDirection: number
+  wind: {
+    speed: number
+    direction: {
+      angle: number
+      letters: string
+    }
+  }
+  energy: string
+}
