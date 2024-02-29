@@ -1,5 +1,5 @@
 import { BuoyModel } from '../models/buoy.ts'
-import { DbBuoyRecord, allData, formatedBuoys, id, value } from '../types.js'
+import { allData, formatedBuoys, id, value } from '../types.js'
 
 async function getBuoys() {
   try {
@@ -47,7 +47,6 @@ function organizeData(data: allData[]) {
     if (!acc[day]) {
       acc[day] = {}
     }
-
     if (!acc[day][hour]) {
       acc[day][hour] = {}
     }
@@ -95,55 +94,11 @@ async function updateBuoysData() {
   })
 }
 
-async function findLastBuoy(): Promise<DbBuoyRecord | null> {
-  try {
-    const lastBuoyData = await BuoyModel.getLastBuoy()
-    return lastBuoyData as DbBuoyRecord
-  } catch (err) {
-    return null
-  }
-}
-
-function sliceData(
-  lastData: DbBuoyRecord,
-  allData: DbBuoyRecord[],
-): DbBuoyRecord[] | undefined {
-  const index = allData.findIndex(
-    (data) => JSON.stringify(data) === JSON.stringify(lastData),
-  )
-  if (index === -1) {
-    console.log('index was not found, uploading all data')
-    return allData
-  }
-
-  const dataToUpload = allData.slice(index + 1)
-
-  return dataToUpload.length === 0 ? undefined : dataToUpload
-}
-
 export async function scheduledUpdate() {
   try {
-    const lastBuoy = await findLastBuoy()
     const newData = await updateBuoysData()
 
-    if (!lastBuoy) {
-      console.log('there was nothing in the database')
-      await BuoyModel.addMultipleBuoys(newData)
-      console.log('uploaded ALL data')
-      return
-    }
-    console.log(
-      'last record in the database: ',
-      lastBuoy,
-      'checking if it matches any of the new data',
-    )
-    const dataToUpload = sliceData(lastBuoy, newData)
-
-    if (!dataToUpload) {
-      console.log('no new data to upload')
-      return
-    }
-    await BuoyModel.addMultipleBuoys(dataToUpload)
+    await BuoyModel.addMultipleBuoys(newData)
     console.log('uploaded new data')
   } catch (err) {
     console.error(err)

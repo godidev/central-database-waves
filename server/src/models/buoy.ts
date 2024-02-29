@@ -1,7 +1,8 @@
 import { Schema, model } from 'mongoose'
-import { DbBuoyRecord } from '../types.ts'
+import { DbBuoyRecord } from '../types.js'
 
 const buoySchema = new Schema({
+  year: Number,
   month: Number,
   day: Number,
   hour: Number,
@@ -49,7 +50,12 @@ export class BuoyModel {
     try {
       buoys.forEach(async (data) => {
         await Buoy.findOneAndUpdate(
-          { month: data.month, day: data.day, hour: data.hour },
+          {
+            year: data.year,
+            month: data.month,
+            day: data.day,
+            hour: data.hour,
+          },
           data,
           {
             upsert: true,
