@@ -99,7 +99,7 @@ export async function scheduledUpdate() {
     const newData = await updateBuoysData()
 
     await BuoyModel.addMultipleBuoys(newData)
-    console.log('uploaded new data')
+    console.log('uploaded new Buoys')
   } catch (err) {
     console.error(err)
   }

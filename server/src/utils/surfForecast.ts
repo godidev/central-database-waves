@@ -98,8 +98,13 @@ function getDate(date: string): number[] {
 }
 
 export async function scheduledUpdate() {
-  const html = await fetchSurfForecast()
-  const newHtml = `<html><body><table>${html}</table></body></html>`
-  const parsedData = await parseForecast(newHtml)
-  await SurfForecastModel.addMultipleForecast(parsedData)
+  try {
+    const html = await fetchSurfForecast()
+    const newHtml = `<html><body><table>${html}</table></body></html>`
+    const parsedData = await parseForecast(newHtml)
+    await SurfForecastModel.addMultipleForecast(parsedData)
+    console.log('updated surf forecast')
+  } catch (err) {
+    console.log('Error updating surf forecast')
+  }
 }
