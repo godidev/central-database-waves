@@ -1,5 +1,7 @@
 node_modules
 .vscode
 build
+dist
+public
 .env
 data*.json
