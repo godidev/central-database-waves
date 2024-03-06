@@ -24,7 +24,7 @@ const SurfForecast = model('SurfForecast', SurfForecastSchema)
 export class SurfForecastModel {
   static async getForecasts() {
     try {
-      const forecast: WaveData[] = await SurfForecast.find().select('-_id -__v')
+      const forecast: WaveData[] = await SurfForecast.find().select('-__v')
       return forecast
     } catch (err) {
       throw new Error("Couldn't get forecasts from the database")

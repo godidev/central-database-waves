@@ -5,7 +5,7 @@ export class SurfForecastController {
   static async getForecasts(req, res) {
     try {
       const forecasts = await SurfForecastModel.getForecasts()
-      res.json(transformData(forecasts))
+      res.json(forecasts)
     } catch (err) {
       console.error(err)
       res.status(500).json({ error: err })
@@ -32,7 +32,7 @@ export class SurfForecastController {
   }
 }
 
-function transformData(data) {
+/*function transformData(data) {
   const transformedData = {}
   data.forEach((forecast) => {
     const { year, month, day, hour, ...rest } = forecast
@@ -53,4 +53,4 @@ function transformData(data) {
   })
   console.log({ transformedData })
   return transformedData
-}
+}*/

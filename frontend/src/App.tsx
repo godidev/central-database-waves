@@ -1,9 +1,12 @@
 import './App.css'
 import BuoyTable from './components/BuoyTable'
+import SurfForecastTable from './components/SurfForecastTable'
 import { useBuoys } from './hooks/useBuoys'
+import { useSurfForecast } from './hooks/useForecast'
 
 function App() {
   const { setDaySelected, uniqueDays, initialData } = useBuoys()
+  const { data } = useSurfForecast()
   return (
     <>
       <div className="day-selector">
@@ -23,6 +26,7 @@ function App() {
         </select>
       </div>
       <BuoyTable initialData={initialData} />
+      <SurfForecastTable initialData={data} />
     </>
   )
 }
