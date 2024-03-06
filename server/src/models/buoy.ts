@@ -16,9 +16,12 @@ const buoySchema = new Schema({
 const Buoy = model('Buoy', buoySchema)
 
 export class BuoyModel {
-  static async getBuoys() {
+  static async getBuoys({ limit }: { limit?: number }) {
     try {
       const buoys: DbBuoyRecord[] = await Buoy.find()
+        .sort({ year: -1, month: -1, day: -1, hour: -1 })
+        .limit(limit)
+        .select('-_id -__v')
       return buoys
     } catch (err) {
       throw new Error("Couldn't get buoys from the database")

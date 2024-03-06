@@ -5,7 +5,7 @@ import { useBuoys } from './hooks/useBuoys'
 import { useSurfForecast } from './hooks/useForecast'
 
 function App() {
-  const { setDaySelected, uniqueDays, initialData } = useBuoys()
+  const { setDaySelected, uniqueDays, initialData } = useBuoys({ limit: 6 })
   const { data } = useSurfForecast()
   return (
     <>

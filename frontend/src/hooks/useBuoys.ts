@@ -1,16 +1,24 @@
 import { useState, useEffect } from 'react'
 import { Buoy } from '../types'
 
-export function useBuoys() {
+type Props = {
+  limit?: number
+}
+
+export function useBuoys({ limit }: Props) {
   const [data, setData] = useState<Buoy[]>([])
   const [daySelected, setDaySelected] = useState<number>(0)
 
+  const fetchUrl = limit
+    ? `http://localhost:3005/buoys?limit=${limit}`
+    : 'http://localhost:3005/buoys'
+
   useEffect(() => {
-    fetch('http://localhost:3005/buoys')
+    fetch(fetchUrl)
       .then((res) => res.json())
       .then((data) => setData(data as Buoy[]))
       .catch((err) => console.error('error:', err))
-  }, [])
+  }, [fetchUrl])
 
   const orderedData = data.sort(compararRegistros)
 
