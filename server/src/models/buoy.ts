@@ -28,6 +28,14 @@ export class BuoyModel {
     }
   }
 
+  static async deleteBuoys({ month, day }) {
+    try {
+      await Buoy.deleteMany({ month: month, day: day })
+    } catch (err) {
+      throw new Error("Couldn't delete buoys from the database")
+    }
+  }
+
   static async getLastBuoy() {
     try {
       const lastBuoyData: DbBuoyRecord = await Buoy.findOne()

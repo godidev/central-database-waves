@@ -20,4 +20,17 @@ export class BuoyController {
       res.status(500).json({ error: err })
     }
   }
+
+  static async deleteBuoys(req, res) {
+    try {
+      const { month, day } = req.query
+      const convertedMonth = Number(month)
+      const convertedDay = Number(day)
+
+      await BuoyModel.deleteBuoys({ month: convertedMonth, day: convertedDay })
+      res.status(200).send('Buoy data deleted successfully!')
+    } catch (err) {
+      res.status(500).json({ error: err })
+    }
+  }
 }
