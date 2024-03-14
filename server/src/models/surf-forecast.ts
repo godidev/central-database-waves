@@ -22,9 +22,13 @@ const SurfForecastSchema = new Schema({
 const SurfForecast = model('SurfForecast', SurfForecastSchema)
 
 export class SurfForecastModel {
-  static async getForecasts() {
+  static async getForecasts({ page, limit }: { page: number; limit: number }) {
     try {
-      const forecast: WaveData[] = await SurfForecast.find().select('-__v')
+      const forecast: WaveData[] = await SurfForecast.find()
+        .sort({ year: -1, month: -1, day: -1, hour: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .select('-__v')
       return forecast
     } catch (err) {
       throw new Error("Couldn't get forecasts from the database")

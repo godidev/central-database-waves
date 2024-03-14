@@ -4,7 +4,8 @@ import { scheduledUpdate } from '../utils/surfForecast.ts'
 export class SurfForecastController {
   static async getForecasts(req, res) {
     try {
-      const forecasts = await SurfForecastModel.getForecasts()
+      const { page, limit } = req.query
+      const forecasts = await SurfForecastModel.getForecasts({ page, limit })
       res.json(forecasts)
     } catch (err) {
       console.error(err)
@@ -31,26 +32,3 @@ export class SurfForecastController {
     }
   }
 }
-
-/*function transformData(data) {
-  const transformedData = {}
-  data.forEach((forecast) => {
-    const { year, month, day, hour, ...rest } = forecast
-
-    if (!transformedData[year]) {
-      transformedData[year] = {}
-    }
-    if (!transformedData[year][month]) {
-      transformedData[year][month] = {}
-    }
-    if (!transformedData[year][month][day]) {
-      transformedData[year][month][day] = {}
-    }
-    if (!transformedData[year][month][day][hour]) {
-      transformedData[year][month][day][hour] = {}
-    }
-    transformedData[year][month][day][hour] = rest._doc
-  })
-  console.log({ transformedData })
-  return transformedData
-}*/
