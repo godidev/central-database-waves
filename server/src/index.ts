@@ -1,4 +1,5 @@
 import express, { json } from 'express'
+import cors from 'cors'
 const app = express()
 import { config } from 'dotenv'
 config()
@@ -7,8 +8,8 @@ import { buoysRouter } from './routes/buoys.ts'
 import { scrapeRouter } from './routes/scrape.ts'
 import { SurfForecastRouter } from './routes/surf-forecast.ts'
 const { PORT, MONGO_URL } = process.env
-
 app.use(json())
+app.use(cors({ origin: '*' }))
 
 app.use('/buoys', buoysRouter)
 app.use('/scrape', scrapeRouter)
