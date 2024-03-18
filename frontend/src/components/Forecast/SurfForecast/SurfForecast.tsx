@@ -1,19 +1,13 @@
-import { useState, useEffect } from 'react'
 import { useSurfForecast } from '../../../hooks/useForecast'
 import { SurfForecast as SurfforecastType } from '../../../types'
 import SurfForecastTable from './SurfForecastTable'
 import SurfForecastResponsive from './SurfForecastResponsive'
+import useWindowWidth from '../../../hooks/useWindowWidth'
 
 export default function SurfForecast() {
-  const [width, setWidth] = useState(window.innerWidth)
+  const width = useWindowWidth()
 
   const { data } = useSurfForecast({ limit: 48, page: 1 })
-
-  useEffect(() => {
-    const handleResize = () => setWidth(window.innerWidth)
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
 
   const splitData = organizarPorDia(data)
 
@@ -22,7 +16,7 @@ export default function SurfForecast() {
       {width < 1368 ? (
         <SurfForecastResponsive data={data} />
       ) : (
-        <div className="table-container">
+        <div className='table-container'>
           {splitData.map((day) => (
             <SurfForecastTable data={day} />
           ))}
