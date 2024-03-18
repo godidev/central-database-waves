@@ -1,28 +1,38 @@
-import { useSurfForecast } from '../hooks/useForecast'
-import { SurfForecast } from '../types'
-import Table from './Table'
+import { useState, useEffect } from 'react'
+import { useSurfForecast } from '../../../hooks/useForecast'
+import { SurfForecast as SurfforecastType } from '../../../types'
+import SurfForecastTable from './SurfForecastTable'
+import SurfForecastResponsive from './SurfForecastResponsive'
 
-export default function SurfForecastTable() {
-  const limit = 48
-  const { data } = useSurfForecast({ page: 1, limit })
+export default function SurfForecast() {
+  const [width, setWidth] = useState(window.innerWidth)
+
+  const { data } = useSurfForecast({ limit: 48, page: 1 })
+
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const splitData = organizarPorDia(data)
 
   return (
     <>
-      <div className="forecast surf-forecast">
-        <h1>Surf Forecast</h1>
+      {width < 1368 ? (
+        <SurfForecastResponsive data={data} />
+      ) : (
         <div className="table-container">
-          {splitData.map((day, index) => (
-            <Table key={index} data={day} />
+          {splitData.map((day) => (
+            <SurfForecastTable data={day} />
           ))}
         </div>
-      </div>
+      )}
     </>
   )
 }
 
-function organizarPorDia(elementos: SurfForecast[]) {
+function organizarPorDia(elementos: SurfforecastType[]) {
   // Crear un objeto para almacenar los elementos organizados por día
   const sortedData = elementos.sort((a, b) => {
     if (a.year !== b.year) {
@@ -40,7 +50,7 @@ function organizarPorDia(elementos: SurfForecast[]) {
     return a.hour - b.hour
   })
   // Iterar sobre los elementos recibidos
-  const elementosPorDia: { [key: number]: SurfForecast[] } = {}
+  const elementosPorDia: { [key: number]: SurfforecastType[] } = {}
 
   sortedData.forEach((elemento) => {
     const dia = elemento.day

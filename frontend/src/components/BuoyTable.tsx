@@ -6,7 +6,7 @@ export default function BuoyTable() {
   data.sort(compararRegistros)
   return (
     <>
-      <div className="forecast buoys">
+      <div className="buoys">
         <h1>Buoys</h1>
         <div className="table-container">
           <table>

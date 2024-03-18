@@ -1,8 +1,6 @@
-import { SurfForecast } from '../types'
+import { SurfForecast } from '../../../types'
 
-export default function table({ data }: { data: SurfForecast[] }) {
-  //get current date hour
-
+export default function SurfForecastTable({ data }: { data: SurfForecast[] }) {
   const date = new Date()
   const currentHour = date.getHours()
   const currentDay = date.getDate()

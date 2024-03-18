@@ -1,13 +1,13 @@
 import './App.css'
 import BuoyTable from './components/BuoyTable'
-import SurfForecastTable from './components/SurfForecastTable'
+import SurfForecast from './components/Forecast/SurfForecast/SurfForecast'
 
 function App() {
   return (
     <>
       <div className="container">
         <BuoyTable />
-        <SurfForecastTable />
+        <SurfForecast />
       </div>
     </>
   )
