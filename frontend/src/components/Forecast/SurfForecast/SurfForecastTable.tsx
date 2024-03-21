@@ -6,7 +6,7 @@ export default function SurfForecastTable({ data }: { data: SurfForecast[] }) {
   const currentDay = date.getDate()
 
   return (
-    <div className='table-container no '>
+    <div className='table-container'>
       <table>
         <thead>
           <tr>

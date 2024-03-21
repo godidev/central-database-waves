@@ -34,13 +34,13 @@ export default function SurfForecastResponsive({
               {row.map((cell, cellIndex) => {
                 if (rowIndex === 0) {
                   return (
-                    <th className={days[1].includes(cellIndex) ? 'newDay' : ''}>
+                    <th>
                       {String(cell)}:00{headings[rowIndex][1]}
                     </th>
                   )
                 } else {
                   return (
-                    <td className={days[1].includes(cellIndex) ? 'newDay' : ''}>
+                    <td className={checkNewDay(days, cellIndex)}>
                       {String(cell)}
                       {headings[rowIndex][1]}
                     </td>
@@ -55,17 +55,29 @@ export default function SurfForecastResponsive({
   )
 }
 
+const checkNewDay = (
+  days: Array<[string, number, number]>,
+  cellIndex: number,
+) => {
+  if (days[0][2] === cellIndex || days[1][2] === cellIndex) {
+    return 'newDay'
+  }
+  return ''
+}
+
 function transformData(data: SurfForecast[]) {
-  const days: Array<[string, number]> = []
+  const days: Array<[string, number, number]> = []
   const transformedData: Array<(number | string)[]> = new Array(6)
     .fill(null)
     .map(() => [])
-  let prevDayCount = -1
+  let prevDayCount = 0
   data.forEach((forecast, dayNumber) => {
     if (forecast.hour === 23 || dayNumber === data.length - 1) {
+      dayNumber++
       days.push([
         forecast.year + '-' + forecast.month + '-' + forecast.day,
         dayNumber - prevDayCount,
+        dayNumber,
       ])
       prevDayCount = dayNumber
     }
