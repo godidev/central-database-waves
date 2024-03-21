@@ -2,6 +2,8 @@ import { useBuoys } from '../../../hooks/useBuoys'
 import { Buoy } from '../../../types'
 
 export default function BuoyTable() {
+  const date = new Date()
+  const timezoneOffset = (date.getTimezoneOffset() / 60) * -1
   const { data } = useBuoys({ limit: 6 })
   data.sort(compararRegistros)
   return (
@@ -24,7 +26,7 @@ export default function BuoyTable() {
           <tbody>
             {data.map((buoy) => (
               <tr key={buoy._id}>
-                <th data-cell='hour'>{buoy.hour}:00</th>
+                <th data-cell='hour'>{buoy.hour + timezoneOffset}:00</th>
                 <td data-cell='height'>{buoy.height}m</td>
                 <td data-cell='period'>{buoy.period}s</td>
                 <td data-cell='avg Period'>{buoy.avgPeriod}</td>
