@@ -7,7 +7,7 @@ import useWindowWidth from '../../../hooks/useWindowWidth'
 export default function SurfForecast() {
   const width = useWindowWidth()
 
-  const { data } = useSurfForecast({ limit: 48, page: 1 })
+  const { data } = useSurfForecast({ limit: 44, page: 1 })
 
   const splitData = organizarPorDia(data)
 

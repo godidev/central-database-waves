@@ -8,7 +8,6 @@ export function useSurfForecast({
   const [data, setData] = useState<SurfForecast[]>([])
 
   const fetchSurfForecast = (page: number, limit: number) => {
-    console.log('fetchSurfForecast')
     fetch(`http://localhost:3005/surf-forecast?page=${page}&limit=${limit}`)
       .then((res) => res.json())
       .then((data) => setData(data))
