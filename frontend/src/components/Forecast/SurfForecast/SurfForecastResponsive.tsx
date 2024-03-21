@@ -1,7 +1,11 @@
-import {SurfForecast} from '../../../types'
+import { SurfForecast } from '../../../types'
 
-export default function SurfForecastResponsive({data}: {data: SurfForecast[]}) {
-  const {days, transformedData} = transformData(data)
+export default function SurfForecastResponsive({
+  data,
+}: {
+  data: SurfForecast[]
+}) {
+  const { days, transformedData } = transformData(data)
   const headings = [
     ['Hora', ''],
     ['Altura', 'm'],
@@ -69,7 +73,7 @@ function transformData(data: SurfForecast[]) {
       const index = getIndex(key)
       if (index === 4) {
         const {
-          direction: {letters},
+          direction: { letters },
           speed,
         } = value
         transformedData[index].push(speed)
@@ -79,7 +83,7 @@ function transformData(data: SurfForecast[]) {
       }
     }
   })
-  return {transformedData, days}
+  return { transformedData, days }
 }
 
 function getIndex(key: string) {

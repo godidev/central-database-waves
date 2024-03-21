@@ -6,7 +6,7 @@ export default function SurfForecastTable({ data }: { data: SurfForecast[] }) {
   const currentDay = date.getDate()
 
   return (
-    <div className="table-container">
+    <div className='table-container no '>
       <table>
         <thead>
           <tr>
@@ -26,10 +26,10 @@ export default function SurfForecastTable({ data }: { data: SurfForecast[] }) {
                 currentDay === day && currentHour === hour ? 'now' : ''
               }
             >
-              <th data-cell="hour">{hour}:00</th>
-              <td data-cell="height">{height}m</td>
-              <td data-cell="period">{period}s</td>
-              <td data-cell="energy">{energy}</td>
+              <th data-cell='hour'>{hour}:00</th>
+              <td data-cell='height'>{height}m</td>
+              <td data-cell='period'>{period}s</td>
+              <td data-cell='energy'>{energy}</td>
             </tr>
           ))}
         </tbody>

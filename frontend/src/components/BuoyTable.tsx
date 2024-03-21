@@ -6,9 +6,9 @@ export default function BuoyTable() {
   data.sort(compararRegistros)
   return (
     <>
-      <div className="buoys">
+      <div className='buoys'>
         <h1>Buoys</h1>
-        <div className="table-container">
+        <div className='table-container'>
           <table>
             <thead>
               <tr>
@@ -25,12 +25,12 @@ export default function BuoyTable() {
             <tbody>
               {data.map((buoy) => (
                 <tr key={buoy._id}>
-                  <th data-cell="hour">{buoy.hour}:00</th>
-                  <td data-cell="height">{buoy.height}m</td>
-                  <td data-cell="period">{buoy.period}s</td>
-                  <td data-cell="avg Period">{buoy.avgPeriod}</td>
-                  <td data-cell="avg Direction">{buoy.avgDirection}</td>
-                  <td data-cell="peak Direction">{buoy.peakDirection}</td>
+                  <th data-cell='hour'>{buoy.hour}:00</th>
+                  <td data-cell='height'>{buoy.height}m</td>
+                  <td data-cell='period'>{buoy.period}s</td>
+                  <td data-cell='avg Period'>{buoy.avgPeriod}</td>
+                  <td data-cell='avg Direction'>{buoy.avgDirection}</td>
+                  <td data-cell='peak Direction'>{buoy.peakDirection}</td>
                 </tr>
               ))}
             </tbody>

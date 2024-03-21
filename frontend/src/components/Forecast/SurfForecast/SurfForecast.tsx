@@ -13,6 +13,7 @@ export default function SurfForecast() {
 
   return (
     <>
+      <h1>Surf Forecast</h1>
       {width < 1368 ? (
         <SurfForecastResponsive data={data} />
       ) : (
