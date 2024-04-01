@@ -22,7 +22,13 @@ const SurfForecastSchema = new Schema({
 const SurfForecast = model('SurfForecast', SurfForecastSchema)
 
 export class SurfForecastModel {
-  static async getForecasts({ page, limit }: { page: number; limit: number }) {
+  static async getSurfForecasts({
+    page,
+    limit,
+  }: {
+    page: number
+    limit: number
+  }) {
     try {
       const forecast: WaveData[] = await SurfForecast.find()
         .sort({ year: -1, month: -1, day: -1, hour: -1 })
@@ -49,12 +55,13 @@ export class SurfForecastModel {
   static async addMultipleForecast(forecast) {
     try {
       forecast.forEach(async (data) => {
+        const { day, hour, month, year } = data
         await SurfForecast.findOneAndUpdate(
           {
-            day: data.day,
-            hour: data.hour,
-            month: data.month,
-            year: data.year,
+            day,
+            hour,
+            month,
+            year,
           },
           data,
           {

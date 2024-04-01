@@ -1,7 +1,7 @@
 import { BuoyModel } from '../models/buoy.ts'
 import { allData, formatedBuoys, id, value } from '../types.js'
 
-async function getBuoys() {
+async function fetchBuoys() {
   try {
     const response = await fetch(
       'https://portus.puertos.es/portussvr/api/RTData/station/2136?locale=es',
@@ -65,7 +65,7 @@ async function updateBuoysData() {
   const month = date.getMonth() + 1
   const year = date.getFullYear()
 
-  return getBuoys().then((data: formatedBuoys) => {
+  return fetchBuoys().then((data: formatedBuoys) => {
     return Object.entries(data)
       .map(([day, hours]) => {
         return Object.entries(hours).map(([hour, values]) => {

@@ -12,7 +12,7 @@ export class BuoyController {
     }
   }
 
-  static async addNewBuoys(req, res) {
+  static async addNewBuoysToDB(req, res) {
     try {
       await scheduledUpdate()
       res.status(200).send('Buoy data updated successfully!')
