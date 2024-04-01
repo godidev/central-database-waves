@@ -35,6 +35,7 @@
     && th,
     td {
       padding: 10px 7px;
+      border: 1px solid #000000;
     }
 
     && tr > th:first-child,
@@ -53,11 +54,76 @@
   background-color: #ffcccc;
 }
 
+.table-container {
+  display: flex;
+  gap: 20px;
+
+  && table {
+    width: 100%;
+    border: 1px solid #000000;
+    border-collapse: collapse;
+
+    && tr {
+      border-bottom: 1px solid #000000;
+
+      &&:last-child {
+        border-bottom: none;
+      }
+    }
+
+    && tr:nth-child(even) {
+      background-color: #d8f0ff;
+    }
+
+    && th {
+      background-color: #e9e9e9;
+      font-weight: bold;
+      text-align: left;
+      border: 1px solid #000000;
+    }
+
+    && th,
+    td {
+      padding: 5px;
+    }
+
+    && tr > th:first-child,
+    tr > td:first-child {
+      left: 0;
+      position: sticky;
+    }
+  }
+}
+
+.surf-forecast {
+  display: flex;
+  flex-direction: column;
+
+  && .tables {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+.surf-forecast,
+.buoys {
+  border: 1px solid #000000;
+  border-radius: 5px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+
+  && h1 {
+    text-align: center;
+  }
+}
+
 .buoys {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  max-width: 90%;
 
   && table {
     max-width: fit-content;
@@ -90,4 +156,24 @@
       padding: 4px;
     }
   }
+}
+
+.container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px;
+}
+
+@media screen and (max-width: 1368px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+th {
+  border: 1px solid #000000;
 }

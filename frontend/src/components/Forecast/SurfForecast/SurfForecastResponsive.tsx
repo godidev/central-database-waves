@@ -17,7 +17,8 @@ export default function SurfForecastResponsive({
 
   return (
     <>
-      <div className='responsive-table table-container'>
+      <h1>Surf forecast</h1>
+      <div className='responsive-table'>
         <table>
           <tr>
             <th>-</th>
