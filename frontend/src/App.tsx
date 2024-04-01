@@ -1,19 +1,19 @@
 import './App.css'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Forecast from './components/Forecast'
+import Menu from './components/Menu'
 
 function App() {
-  const BrowserRouter = createBrowserRouter([
-    {
-      path: '/',
-      element: <Forecast />,
-    },
-  ])
-
   return (
-    <>
-      <RouterProvider router={BrowserRouter} />
-    </>
+    <Router>
+      <Menu />
+      <div className='container'>
+        <Routes>
+          <Route path='/forecast' element={<Forecast />} />
+          <Route path='/previous' element={<div>previous</div>} />
+        </Routes>
+      </div>
+    </Router>
   )
 }
 
