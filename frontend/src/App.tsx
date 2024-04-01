@@ -1,14 +1,18 @@
 import './App.css'
-import BuoyTable from './components/Forecast/Buoys/BuoyTable'
-import SurfForecast from './components/Forecast/SurfForecast/SurfForecast'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import Forecast from './components/Forecast'
 
 function App() {
+  const BrowserRouter = createBrowserRouter([
+    {
+      path: '/',
+      element: <Forecast />,
+    },
+  ])
+
   return (
     <>
-      <div className='container'>
-        <BuoyTable />
-        <SurfForecast />
-      </div>
+      <RouterProvider router={BrowserRouter} />
     </>
   )
 }
