@@ -1,7 +1,7 @@
+import { BuoyFetch, formatedBuoys, id, value } from '../types.js'
 import { BuoyModel } from '../models/buoy.ts'
-import { allData, formatedBuoys, id, value } from '../types.js'
 
-async function fetchBuoys() {
+async function fetchBuoys(): Promise<BuoyFetch[] | void> {
   try {
     const response = await fetch(
       'https://portus.puertos.es/portussvr/api/RTData/station/2136?locale=es',
@@ -18,7 +18,7 @@ async function fetchBuoys() {
       },
     )
     const res = await response.json()
-    return organizeData(res)
+    return res as BuoyFetch[]
   } catch (err) {
     return console.error(err)
   }
@@ -38,66 +38,42 @@ function formatValue(id: id, value: value): number {
   }
 }
 
-function organizeData(data: allData[]) {
-  return data.reduce((acc, { fecha, datos }) => {
-    const [date, time] = fecha.split(' ')
-    const day = parseInt(date.split('-')[2])
-    const hour = parseInt(time.split(':')[0])
-
-    if (!acc[day]) {
-      acc[day] = {}
-    }
-    if (!acc[day][hour]) {
-      acc[day][hour] = {}
+function organizeData(data: BuoyFetch[]): formatedBuoys[] {
+  return data.map(({ fecha, datos }) => {
+    const formattedData: formatedBuoys['datos'] = {
+      'Periodo de Pico': 0,
+      'Altura Signif. del Oleaje': 0,
+      'Direcc. Media de Proced.': 0,
+      'Direcc. de pico de proced.': 0,
+      'Periodo Medio Tm02': 0,
     }
 
-    datos.forEach(
-      ({ id, nombreParametro, valor }) =>
-        (acc[day][hour][nombreParametro] = formatValue(id, valor)),
-    )
+    datos.forEach(({ id, valor, nombreParametro }) => {
+      const formattedValue = formatValue(id, valor)
+      formattedData[nombreParametro] = formattedValue
+    })
 
-    return acc
-  }, {})
+    return {
+      fecha,
+      datos: formattedData,
+    }
+  })
 }
 
 async function updateBuoysData() {
-  const date = new Date()
-  const month = date.getMonth() + 1
-  const year = date.getFullYear()
+  const data = await fetchBuoys()
 
-  return fetchBuoys().then((data: formatedBuoys) => {
-    return Object.entries(data)
-      .map(([day, hours]) => {
-        return Object.entries(hours).map(([hour, values]) => {
-          const {
-            'Direcc. Media de Proced.': avgDirection,
-            'Direcc. de pico de proced.': peakDirection,
-            'Periodo de Pico': period,
-            'Periodo Medio Tm02': avgPeriod,
-            'Altura Signif. del Oleaje': height,
-          } = values
+  if (!data) {
+    return []
+  }
+  const formatedData = organizeData(data)
 
-          return {
-            year,
-            month,
-            day: Number(day),
-            hour: Number(hour),
-            period,
-            height,
-            avgDirection,
-            peakDirection,
-            avgPeriod,
-          }
-        })
-      })
-      .flat()
-  })
+  return formatedData
 }
 
 export async function scheduledUpdate() {
   try {
     const newData = await updateBuoysData()
-
     await BuoyModel.addMultipleBuoys(newData)
     console.log('uploaded new Buoys')
   } catch (err) {

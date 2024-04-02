@@ -1,16 +1,15 @@
 import { Schema, model } from 'mongoose'
-import { DbBuoyRecord } from '../types.js'
+import { DbBuoyRecord, formatedBuoys } from '../types.js'
 
 const buoySchema = new Schema({
-  year: Number,
-  month: Number,
-  day: Number,
-  hour: Number,
-  period: Number,
-  height: Number,
-  avgDirection: Number,
-  peakDirection: Number,
-  avgPeriod: Number,
+  fecha: String,
+  datos: {
+    'Periodo Medio Tm02': Number,
+    'Altura Signif. del Oleaje': Number,
+    'Direcc. Media de Proced.': Number,
+    'Direcc. de pico de proced.': Number,
+    'Periodo de Pico': Number,
+  },
 })
 
 const Buoy = model('Buoy', buoySchema)
@@ -19,7 +18,7 @@ export class BuoyModel {
   static async getBuoys({ limit = 6 }: { limit?: number }) {
     try {
       const buoys: DbBuoyRecord[] = await Buoy.find()
-        .sort({ year: -1, month: -1, day: -1, hour: -1 })
+        .sort({ fecha: -1 })
         .limit(limit)
         .select('-_id -__v')
       return buoys
@@ -49,7 +48,6 @@ export class BuoyModel {
 
   static async addBuoy(buoys) {
     try {
-      console.log({ buoys })
       const data = await Buoy.insertMany(buoys)
       return data
     } catch (err) {
@@ -57,22 +55,16 @@ export class BuoyModel {
     }
   }
 
-  static async addMultipleBuoys(buoys) {
+  static async addMultipleBuoys(buoys: formatedBuoys[]) {
     try {
-      buoys.forEach(async (data) => {
-        await Buoy.findOneAndUpdate(
-          {
-            year: data.year,
-            month: data.month,
-            day: data.day,
-            hour: data.hour,
-          },
-          data,
-          {
-            upsert: true,
-          },
-        )
-      })
+      const bulkOps = buoys.map(({ fecha, datos }) => ({
+        updateOne: {
+          filter: { fecha },
+          update: { fecha, datos },
+          upsert: true,
+        },
+      }))
+      await Buoy.bulkWrite(bulkOps)
     } catch (err) {
       throw new Error("Couldn't add multiple buoys to the database")
     }

@@ -3,12 +3,12 @@ type value = Pick<fetchData, 'valor'>['valor']
 
 type date = string
 
-export interface allData {
+export interface BuoyFetch {
   fecha: date
-  datos: fetchData[]
+  datos: buoyFetchDatos[]
 }
 
-export interface fetchData {
+export interface buoyFetchDatos {
   id: id
   nombreParametro: string
   nombreColumna: string
@@ -22,27 +22,21 @@ export interface fetchData {
 }
 
 type formatedBuoys = {
-  [day: string]: {
-    [hour: string]: {
-      'Periodo de Pico': number
-      'Altura Signif. del Oleaje': number
-      'Direcc. Media de Proced.': number
-      'Direcc. de pico de proced.': number
-      'Periodo Medio Tm02': number
-    }
+  fecha: string
+  datos: {
+    'Periodo de Pico': number
+    'Altura Signif. del Oleaje': number
+    'Direcc. Media de Proced.': number
+    'Direcc. de pico de proced.': number
+    'Periodo Medio Tm02': number
   }
 }
 
 export interface DbBuoyRecord {
-  year: number
-  month: number
-  day: number
-  hour: number
-  period: number
-  height: number
-  avgDirection: number
-  peakDirection: number
-  avgPeriod: number
+  fecha: string
+  datos: {
+    [key: string]: number
+  }
 }
 
 export interface WaveData {
