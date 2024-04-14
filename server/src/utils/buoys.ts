@@ -60,7 +60,6 @@ function organizeData(data: BuoyFetch[]) {
       const formattedValue = formatValue(id, valor)
       deestructuredData[newName] = formattedValue
     })
-    console.log({ deestructuredData })
 
     return {
       fecha,

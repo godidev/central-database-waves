@@ -6,7 +6,6 @@ export default function BuoyTable() {
   const { data } = useBuoys({ limit: 6 })
   const firstDate = new Date(data[0]?.fecha)
 
-  console.log({ data })
   return (
     <>
       <div className='buoys table-container'>
@@ -24,7 +23,6 @@ export default function BuoyTable() {
           </thead>
           <tbody>
             {data.map(({ datos, fecha }, index) => {
-              console.log(index)
               {
                 index === 0 && (
                   <NewDayRecord
