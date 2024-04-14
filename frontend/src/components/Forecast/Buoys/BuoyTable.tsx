@@ -1,11 +1,12 @@
 import { useBuoys } from '../../../hooks/useBuoys'
-import { Buoy } from '../../../types'
+import { buoyTypes } from '../../../types'
+import NewDayRecord from './NewDayRecord'
 
 export default function BuoyTable() {
-  const date = new Date()
-  const timezoneOffset = (date.getTimezoneOffset() / 60) * -1
   const { data } = useBuoys({ limit: 6 })
-  data.sort(compararRegistros)
+  const firstDate = new Date(data[0]?.fecha)
+
+  console.log({ data })
   return (
     <>
       <div className='buoys table-container'>
@@ -13,34 +14,67 @@ export default function BuoyTable() {
         <table>
           <thead>
             <tr>
-              <th>
-                {data[0]?.year}/{data[0]?.month}/{data[0]?.day}
-              </th>
-              <th>Height</th>
-              <th>Period</th>
-              <th>Avg Period</th>
-              <th>Avg Direction</th>
-              <th>Peak Direction</th>
+              <th></th>
+              <th key={'height'}>Height</th>
+              <th key={'period'}>Period</th>
+              <th key={'Avg period'}>Avg Period</th>
+              <th key={'avg direction'}>Avg Direction</th>
+              <th key={'peak direction'}>Peak Direction</th>
             </tr>
           </thead>
           <tbody>
-            {data.map((buoy) => (
-              <tr key={buoy._id}>
-                <th data-cell='hour'>{buoy.hour + timezoneOffset}:00</th>
-                <td data-cell='height'>{buoy.height}m</td>
-                <td data-cell='period'>{buoy.period}s</td>
-                <td data-cell='avg Period'>{buoy.avgPeriod}</td>
-                <td data-cell='avg Direction'>{buoy.avgDirection}</td>
-                <td data-cell='peak Direction'>{buoy.peakDirection}</td>
-              </tr>
-            ))}
+            {data.map(({ datos, fecha }, index) => {
+              console.log(index)
+              {
+                index === 0 && (
+                  <NewDayRecord
+                    key={firstDate.toLocaleString()}
+                    modifiedDate={firstDate}
+                  />
+                )
+              }
+
+              const modifiedDate = new Date(fecha)
+              modifiedDate.setHours(modifiedDate.getHours() + 2)
+              if (
+                modifiedDate.getHours() === 0 ||
+                modifiedDate.getHours() === 1
+              ) {
+                modifiedDate.setDate(modifiedDate.getDate() + 1)
+              }
+              const slicedHours = modifiedDate.getHours() < 10 ? 4 : 5
+              return (
+                <>
+                  {modifiedDate.getHours() === 23 && (
+                    <NewDayRecord
+                      key={modifiedDate.toLocaleString()}
+                      modifiedDate={modifiedDate}
+                    />
+                  )}
+                  <tr key={modifiedDate.toLocaleString()}>
+                    <th data-cell='hour'>
+                      {modifiedDate
+                        .toLocaleTimeString('es-ES')
+                        .slice(0, slicedHours)}
+                    </th>
+                    <td data-cell='height'>{datos[buoyTypes.Altura]}m</td>
+                    <td data-cell='period'>{datos[buoyTypes.Periodo]}s</td>
+                    <td data-cell='avg Period'>
+                      {datos[buoyTypes.PeriodoMedio]}s
+                    </td>
+                    <td data-cell='avg Direction'>
+                      {datos[buoyTypes.DireccionMedia]}
+                    </td>
+                    <td data-cell='peak Direction'>
+                      {datos[buoyTypes.DireccionPico]}
+                    </td>
+                  </tr>
+                </>
+              )
+            })}
           </tbody>
         </table>
       </div>
     </>
   )
 }
-
-// Función de comparación
-const compararRegistros = (a: Buoy, b: Buoy) =>
-  a.year - b.year || a.month - b.month || a.day - b.day || a.hour - b.hour

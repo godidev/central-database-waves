@@ -1,4 +1,4 @@
-import { BuoyFetch, formatedBuoys, id, value } from '../types.js'
+import { BuoyFetch, DbBuoyRecord, id, value } from '../types.js'
 import { BuoyModel } from '../models/buoy.ts'
 
 async function fetchBuoys(): Promise<BuoyFetch[] | void> {
@@ -38,9 +38,9 @@ function formatValue(id: id, value: value): number {
   }
 }
 
-function organizeData(data: BuoyFetch[]): formatedBuoys[] {
+function organizeData(data: BuoyFetch[]) {
   return data.map(({ fecha, datos }) => {
-    const formattedData: formatedBuoys['datos'] = {
+    const formattedData: DbBuoyRecord['datos'] = {
       'Periodo de Pico': 0,
       'Altura Signif. del Oleaje': 0,
       'Direcc. Media de Proced.': 0,
@@ -48,14 +48,23 @@ function organizeData(data: BuoyFetch[]): formatedBuoys[] {
       'Periodo Medio Tm02': 0,
     }
 
+    const deestructuredData = Object.fromEntries(
+      Object.entries(formattedData).map(([key, value]) => [
+        key.replace(/\./g, ''),
+        value,
+      ]),
+    )
+
     datos.forEach(({ id, valor, nombreParametro }) => {
+      const newName = nombreParametro.replace(/\./g, '')
       const formattedValue = formatValue(id, valor)
-      formattedData[nombreParametro] = formattedValue
+      deestructuredData[newName] = formattedValue
     })
+    console.log({ deestructuredData })
 
     return {
       fecha,
-      datos: formattedData,
+      datos: deestructuredData,
     }
   })
 }

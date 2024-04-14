@@ -11,6 +11,17 @@ export interface Buoy {
   peakDirection: number
 }
 
+export type formatedBuoys = {
+  fecha: string
+  datos: {
+    [buoyTypes.Altura]: number
+    [buoyTypes.Periodo]: number
+    [buoyTypes.DireccionMedia]: number
+    [buoyTypes.DireccionPico]: number
+    [buoyTypes.PeriodoMedio]: number
+  }
+}
+
 export interface SurfForecast {
   wind: {
     speed: number
@@ -28,4 +39,12 @@ export interface SurfForecast {
   height: number
   period: number
   waveDirecton: number
+}
+
+export enum buoyTypes {
+  Altura = 'Altura Signif del Oleaje',
+  Periodo = 'Periodo de Pico',
+  DireccionMedia = 'Direcc Media de Proced',
+  DireccionPico = 'Direcc de pico de proced',
+  PeriodoMedio = 'Periodo Medio Tm02',
 }

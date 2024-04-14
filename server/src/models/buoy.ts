@@ -1,14 +1,14 @@
 import { Schema, model } from 'mongoose'
-import { DbBuoyRecord, formatedBuoys } from '../types.js'
+import { DbBuoyRecord } from '../types.js'
 
 const buoySchema = new Schema({
   fecha: String,
   datos: {
-    'Periodo Medio Tm02': Number,
-    'Altura Signif. del Oleaje': Number,
-    'Direcc. Media de Proced.': Number,
-    'Direcc. de pico de proced.': Number,
     'Periodo de Pico': Number,
+    'Altura Signif del Oleaje': Number,
+    'Direcc Media de Proced': Number,
+    'Direcc de pico de proced': Number,
+    'Periodo Medio Tm02': Number,
   },
 })
 
@@ -55,7 +55,7 @@ export class BuoyModel {
     }
   }
 
-  static async addMultipleBuoys(buoys: formatedBuoys[]) {
+  static async addMultipleBuoys(buoys) {
     try {
       const bulkOps = buoys.map(({ fecha, datos }) => ({
         updateOne: {

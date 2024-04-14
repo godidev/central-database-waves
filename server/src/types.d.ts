@@ -25,9 +25,9 @@ type formatedBuoys = {
   fecha: string
   datos: {
     'Periodo de Pico': number
-    'Altura Signif. del Oleaje': number
-    'Direcc. Media de Proced.': number
-    'Direcc. de pico de proced.': number
+    'Altura Signif del Oleaje': number
+    'Direcc Media de Proced': number
+    'Direcc de pico de proced': number
     'Periodo Medio Tm02': number
   }
 }
@@ -35,7 +35,11 @@ type formatedBuoys = {
 export interface DbBuoyRecord {
   fecha: string
   datos: {
-    [key: string]: number
+    'Periodo de Pico': number
+    'Altura Signif. del Oleaje': number
+    'Direcc. Media de Proced.': number
+    'Direcc. de pico de proced.': number
+    'Periodo Medio Tm02': number
   }
 }
 
