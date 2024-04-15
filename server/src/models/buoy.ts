@@ -1,7 +1,8 @@
 import { Schema, model } from 'mongoose'
-import { DbBuoyRecord } from '../types.js'
+import { DbBuoyRecord, formatedBuoys } from '../types.js'
 
 const buoySchema = new Schema({
+  station: { type: String, required: true },
   fecha: String,
   datos: {
     'Periodo de Pico': Number,
@@ -55,18 +56,21 @@ export class BuoyModel {
     }
   }
 
-  static async addMultipleBuoys(buoys) {
+  static async addMultipleBuoys(
+    name: string,
+    buoys: { fecha: string; datos: formatedBuoys['datos'] }[],
+  ) {
     try {
       const bulkOps = buoys.map(({ fecha, datos }) => ({
         updateOne: {
-          filter: { fecha },
-          update: { fecha, datos },
+          filter: { station: name, fecha },
+          update: { station: name, fecha, datos },
           upsert: true,
         },
       }))
       await Buoy.bulkWrite(bulkOps)
     } catch (err) {
-      throw new Error("Couldn't add multiple buoys to the database")
+      throw new Error("Couldn't add multiple buoys to the database", err)
     }
   }
 }
