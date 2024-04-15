@@ -20,7 +20,7 @@ export default function SurfForecast() {
           <h1>Surf forecast</h1>
           <div className='tables'>
             {splitData.map((day) => (
-              <SurfForecastTable data={day} />
+              <SurfForecastTable data={day} key={day.toString()} />
             ))}
           </div>
         </div>

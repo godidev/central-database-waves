@@ -41,34 +41,32 @@ export default function BuoyTable() {
                 modifiedDate.setDate(modifiedDate.getDate() + 1)
               }
               const slicedHours = modifiedDate.getHours() < 10 ? 4 : 5
-              return (
-                <>
-                  {modifiedDate.getHours() === 23 && (
-                    <NewDayRecord
-                      key={modifiedDate.toLocaleString()}
-                      modifiedDate={modifiedDate}
-                    />
-                  )}
-                  <tr key={modifiedDate.toLocaleString()}>
-                    <th data-cell='hour'>
-                      {modifiedDate
-                        .toLocaleTimeString('es-ES')
-                        .slice(0, slicedHours)}
-                    </th>
-                    <td data-cell='height'>{datos[buoyTypes.Altura]}m</td>
-                    <td data-cell='period'>{datos[buoyTypes.Periodo]}s</td>
-                    <td data-cell='avg Period'>
-                      {datos[buoyTypes.PeriodoMedio]}s
-                    </td>
-                    <td data-cell='avg Direction'>
-                      {datos[buoyTypes.DireccionMedia]}
-                    </td>
-                    <td data-cell='peak Direction'>
-                      {datos[buoyTypes.DireccionPico]}
-                    </td>
-                  </tr>
-                </>
-              )
+              return [
+                modifiedDate.getHours() === 23 && (
+                  <NewDayRecord
+                    key={modifiedDate.toLocaleString()}
+                    modifiedDate={modifiedDate}
+                  />
+                ),
+                <tr key={modifiedDate.toString()}>
+                  <th data-cell='hour'>
+                    {modifiedDate
+                      .toLocaleTimeString('es-ES')
+                      .slice(0, slicedHours)}
+                  </th>
+                  <td data-cell='height'>{datos[buoyTypes.Altura]}m</td>
+                  <td data-cell='period'>{datos[buoyTypes.Periodo]}s</td>
+                  <td data-cell='avg Period'>
+                    {datos[buoyTypes.PeriodoMedio]}s
+                  </td>
+                  <td data-cell='avg Direction'>
+                    {datos[buoyTypes.DireccionMedia]}
+                  </td>
+                  <td data-cell='peak Direction'>
+                    {datos[buoyTypes.DireccionPico]}
+                  </td>
+                </tr>,
+              ]
             })}
           </tbody>
         </table>

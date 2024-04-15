@@ -20,36 +20,42 @@ export default function SurfForecastResponsive({
       <h1>Surf forecast</h1>
       <div className='responsive-table'>
         <table>
-          <tr>
-            <th>-</th>
-            {days.map(([day, dayNumber]) => (
-              <th colSpan={dayNumber} className='day'>
-                {day}
-              </th>
-            ))}
-          </tr>
-
-          {transformedData.map((row, rowIndex) => (
+          <thead>
             <tr>
-              <th>{headings[rowIndex][0]}</th>
-              {row.map((cell, cellIndex) => {
-                if (rowIndex === 0) {
-                  return (
-                    <th>
-                      {String(cell)}:00{headings[rowIndex][1]}
-                    </th>
-                  )
-                } else {
-                  return (
-                    <td className={checkNewDay(days, cellIndex)}>
-                      {String(cell)}
-                      {headings[rowIndex][1]}
-                    </td>
-                  )
-                }
-              })}
+              <th>-</th>
+              {days.map(([day, dayNumber]) => (
+                <th key={dayNumber} colSpan={dayNumber} className='day'>
+                  {day}
+                </th>
+              ))}
             </tr>
-          ))}
+          </thead>
+          <tbody>
+            {transformedData.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                <th>{headings[rowIndex][0]}</th>
+                {row.map((cell, cellIndex) => {
+                  if (rowIndex === 0) {
+                    return (
+                      <th key={rowIndex + cellIndex}>
+                        {String(cell)}:00{headings[rowIndex][1]}
+                      </th>
+                    )
+                  } else {
+                    return (
+                      <td
+                        key={rowIndex + cellIndex + 1}
+                        className={checkNewDay(days, cellIndex)}
+                      >
+                        {String(cell)}
+                        {headings[rowIndex][1]}
+                      </td>
+                    )
+                  }
+                })}
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     </>
