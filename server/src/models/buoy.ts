@@ -16,9 +16,15 @@ const buoySchema = new Schema({
 const Buoy = model('Buoy', buoySchema)
 
 export class BuoyModel {
-  static async getBuoys({ limit = 6 }: { limit?: number }) {
+  static async getBuoys({
+    limit = 6,
+    buoy = '7113',
+  }: {
+    limit?: number
+    buoy?: string
+  }) {
     try {
-      const buoys: DbBuoyRecord[] = await Buoy.find()
+      const buoys: DbBuoyRecord[] = await Buoy.find({ station: buoy })
         .sort({ fecha: -1 })
         .limit(limit)
         .select('-_id -__v')
@@ -57,14 +63,14 @@ export class BuoyModel {
   }
 
   static async addMultipleBuoys(
-    name: string,
+    station: string,
     buoys: { fecha: string; datos: formatedBuoys['datos'] }[],
   ) {
     try {
       const bulkOps = buoys.map(({ fecha, datos }) => ({
         updateOne: {
-          filter: { station: name, fecha },
-          update: { station: name, fecha, datos },
+          filter: { station, fecha },
+          update: { station, fecha, datos },
           upsert: true,
         },
       }))

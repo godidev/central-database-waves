@@ -88,10 +88,10 @@ async function updateBuoysData({ station, body }) {
 
 export async function scheduledUpdate() {
   try {
-    buoys.forEach(async ({ name, station, body }) => {
+    buoys.forEach(async ({ station, body }) => {
       console.log('fetching new Buoys')
       const newBuoys = await updateBuoysData({ station, body })
-      await BuoyModel.addMultipleBuoys(name, newBuoys)
+      await BuoyModel.addMultipleBuoys(station, newBuoys)
     })
     console.log('uploaded new Buoys')
   } catch (err) {

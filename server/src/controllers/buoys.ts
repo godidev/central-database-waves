@@ -4,8 +4,9 @@ import { scheduledUpdate } from '../utils/buoys.ts'
 export class BuoyController {
   static async getBuoys(req, res) {
     try {
-      const { limit } = req.query
-      const buoys = await BuoyModel.getBuoys({ limit })
+      const { limit, buoy } = req.query
+      console.log('limit:', limit, 'buoy:', buoy)
+      const buoys = await BuoyModel.getBuoys({ limit, buoy })
       res.json(buoys)
     } catch (err) {
       res.status(500).json({ error: err })
