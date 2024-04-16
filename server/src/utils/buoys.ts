@@ -1,10 +1,17 @@
-import { BuoyFetch, DbBuoyRecord, id, value } from '../types.js'
+import { BuoyFetch, DbBuoyRecord, formatedBuoys, id, value } from '../types.js'
 import { BuoyModel } from '../models/buoy.ts'
+import buoys from '../../buoyData.json'
 
-async function fetchBuoys(): Promise<BuoyFetch[] | void> {
+async function fetchBuoys({
+  station,
+  body,
+}: {
+  station: string
+  body: string[]
+}): Promise<BuoyFetch[] | void> {
   try {
     const response = await fetch(
-      'https://portus.puertos.es/portussvr/api/RTData/station/2136?locale=es',
+      `https://portus.puertos.es/portussvr/api/RTData/station/${station}?locale=es`,
       {
         headers: {
           accept: 'application/json, text/plain, */*',
@@ -13,7 +20,7 @@ async function fetchBuoys(): Promise<BuoyFetch[] | void> {
           Referer: 'https://portus.puertos.es/',
           'Referrer-Policy': 'strict-origin-when-cross-origin',
         },
-        body: '[34,13,20,21,32]',
+        body: `${body}`,
         method: 'POST',
       },
     )
@@ -64,12 +71,12 @@ function organizeData(data: BuoyFetch[]) {
     return {
       fecha,
       datos: deestructuredData,
-    }
+    } as formatedBuoys
   })
 }
 
-async function updateBuoysData() {
-  const data = await fetchBuoys()
+async function updateBuoysData({ station, body }) {
+  const data = await fetchBuoys({ station, body })
 
   if (!data) {
     return []
@@ -81,8 +88,11 @@ async function updateBuoysData() {
 
 export async function scheduledUpdate() {
   try {
-    const newData = await updateBuoysData()
-    await BuoyModel.addMultipleBuoys(newData)
+    buoys.forEach(async ({ station, body }) => {
+      console.log('fetching new Buoys')
+      const newBuoys = await updateBuoysData({ station, body })
+      await BuoyModel.addMultipleBuoys(station, newBuoys)
+    })
     console.log('uploaded new Buoys')
   } catch (err) {
     console.error(err)

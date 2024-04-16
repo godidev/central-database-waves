@@ -1,7 +1,8 @@
 import { Schema, model } from 'mongoose'
-import { DbBuoyRecord } from '../types.js'
+import { DbBuoyRecord, formatedBuoys } from '../types.js'
 
 const buoySchema = new Schema({
+  station: { type: String, required: true },
   fecha: String,
   datos: {
     'Periodo de Pico': Number,
@@ -15,9 +16,15 @@ const buoySchema = new Schema({
 const Buoy = model('Buoy', buoySchema)
 
 export class BuoyModel {
-  static async getBuoys({ limit = 6 }: { limit?: number }) {
+  static async getBuoys({
+    limit = 6,
+    buoy = '7113',
+  }: {
+    limit?: number
+    buoy?: string
+  }) {
     try {
-      const buoys: DbBuoyRecord[] = await Buoy.find()
+      const buoys: DbBuoyRecord[] = await Buoy.find({ station: buoy })
         .sort({ fecha: -1 })
         .limit(limit)
         .select('-_id -__v')
@@ -55,18 +62,21 @@ export class BuoyModel {
     }
   }
 
-  static async addMultipleBuoys(buoys) {
+  static async addMultipleBuoys(
+    station: string,
+    buoys: { fecha: string; datos: formatedBuoys['datos'] }[],
+  ) {
     try {
       const bulkOps = buoys.map(({ fecha, datos }) => ({
         updateOne: {
-          filter: { fecha },
-          update: { fecha, datos },
+          filter: { station, fecha },
+          update: { station, fecha, datos },
           upsert: true,
         },
       }))
       await Buoy.bulkWrite(bulkOps)
     } catch (err) {
-      throw new Error("Couldn't add multiple buoys to the database")
+      throw new Error("Couldn't add multiple buoys to the database", err)
     }
   }
 }

@@ -1,15 +1,17 @@
 import { useBuoys } from '../../../hooks/useBuoys'
 import { buoyTypes } from '../../../types'
+import BuoySelector from './BuoySelector'
 import NewDayRecord from './NewDayRecord'
 
 export default function BuoyTable() {
-  const { data } = useBuoys({ limit: 6 })
+  const { data, changeBuoy } = useBuoys({ limit: 6 })
   const firstDate = new Date(data[0]?.fecha)
 
   return (
     <>
       <div className='buoys table-container'>
         <h1>Buoys</h1>
+        <BuoySelector changeBuoy={changeBuoy} />
         <table>
           <thead>
             <tr>
